@@ -6,7 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catalog</title>
 </head>
-<body>
-    <h1>Hello, user</h1>
+<body class="container">
+    <form method="POST" action="create/">
+        {% csrf_token %}
+        <p>
+            <label for="name">Введите имя</label><br>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            <label for="age">Введите возраст</label><br>
+            <input type="number" name="age" id="age">
+        </p>
+        <input type="submit" value="Сохранить" >
+    </form>
+
+    {% if people.count > 0 %}
+    <h2>Список пользователей</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Имя</th>
+            <th>Возраст</th>
+        </tr>
+        {% for person in people %}
+        <tr>
+            <td>{{ person.id }}</td>
+            <td>{{ person.name }}</td>
+            <td>{{ person.age }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 </body>
 </html>

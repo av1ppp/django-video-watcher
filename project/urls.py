@@ -19,5 +19,6 @@ from django.urls import path
 
 urlpatterns = [
     path('', catalog_views.index),
+    path('create/', catalog_views.create),
     path('admin/', admin.site.urls),
 ]
