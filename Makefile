@@ -17,5 +17,4 @@ clean:      ## Clean byte-compiled files.
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
 	find . -name '*~' -exec rm --force  {} +
-	find . -name '*~' -exec rm --force  {} +
 	find . -name '__pycache__' -type d -exec rm -rf  {} +
