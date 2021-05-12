@@ -29,6 +29,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Media
+MEDIA_ROOT = path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,8 +85,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'my_database',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'csrweb',
+        'USER': 'django',
+        'PASSWORD': '2102',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -122,6 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SATICFILES_DIRS = [
+    path.join(BASE_DIR, 'static')
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

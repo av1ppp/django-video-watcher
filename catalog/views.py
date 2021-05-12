@@ -1,23 +1,31 @@
 from .forms import VideoForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Video
+from .models import Snapshot, Video
 
 
 def index(request):
-    if request.method == 'POST':
-        v = Video()
-        v.name = request.POST.get('name')
-        v.save()
-        return HttpResponseRedirect(request.path)
-    else:
-        videos = Video.objects.all()
-        for v in videos:
-            v.snapshot_uri = v.get_snapshot_uri()
+    videos = Video.objects.all()
+    for v in videos:
+        if v.snapshot:
+            v.snapshot_url = v.snapshot.image.url
+        else:
+            v.snapshot_url = 'default.jpg'
 
-        videoform = VideoForm()
-        ctx = {
-            'form': videoform,
-            'videos': videos
-        }
-        return render(request, 'catalog/index.html', ctx)
+    context = {'videos': videos}
+
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            name = form.cleaned_data.get('name')
+            image = form.cleaned_data.get('image')
+            obj = Video.objects.create(
+                name = name,
+                snapshot = Snapshot.objects.create(image = image)
+            )
+            obj.save()
+        context['form'] = form
+    else:
+        context['form'] = VideoForm()
+
+    return render(request, 'catalog/index.html', context)

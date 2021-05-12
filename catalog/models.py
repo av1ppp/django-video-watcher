@@ -1,8 +1,11 @@
-from djongo import models
+from django.db import models
 
+class Snapshot(models.Model):
+    image = models.ImageField(upload_to='snapshot', default='default.jpg')
 
 class Video(models.Model):
     name = models.CharField(max_length=255)
-    
-    def get_snapshot_uri(self) -> str:
-        return 'https://www.gizbot.com/images/2020-09/realme-7_159921061900.jpg'
+    snapshot = models.OneToOneField(Snapshot, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.name
