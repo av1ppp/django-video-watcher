@@ -4,25 +4,63 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalog</title>
+    <title>Каталог</title>
+
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; }
+
+        .form-group {
+            margin: 30px 0;
+            text-align: center;
+        }
+        input[type="text"] { border-radius: 5px; }
+        input[type="button"], input[type="submit"], button {
+            background-color: rgb(47, 152, 201);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        .catalog {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .video {
+            border: 1px solid grey;
+            border-radius: 5px;
+            margin: 7px 10px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body class="container">
-    <form method="POST" action="create/">
+    <form action="" method="post">
         {% csrf_token %}
-        <p>
-            <label for="name">Название</label><br>
-            <input type="text" name="name" id="name">
-        </p>
-        <input type="submit" value="Сохранить" >
+
+        <div>
+            {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                <div>{{ field }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align: right; margin-right: 50px;">
+            <input type="submit" style="cursor: pointer;" value="Добавить">
+        </div>
     </form>
+
+    <hr>
 
     <h2>Каталог видео</h2>
     <div class="catalog">
         {% if videos.count > 0 %}
             {% for v in videos %}
                 <div class="video">
-                    <img src="{{ v.snapshot_uri }}" height="100px">
                     <h5>#{{ v.id }} - {{ v.name }}</h5>
+                    <img src="{{ v.snapshot_uri }}" height="100px">
                 </div>
             {% endfor %}
         {% else %}
