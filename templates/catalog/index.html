@@ -10,32 +10,24 @@
     <form method="POST" action="create/">
         {% csrf_token %}
         <p>
-            <label for="name">Введите имя</label><br>
+            <label for="name">Название</label><br>
             <input type="text" name="name" id="name">
-        </p>
-        <p>
-            <label for="age">Введите возраст</label><br>
-            <input type="number" name="age" id="age">
         </p>
         <input type="submit" value="Сохранить" >
     </form>
 
-    {% if people.count > 0 %}
-    <h2>Список пользователей</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Имя</th>
-            <th>Возраст</th>
-        </tr>
-        {% for person in people %}
-        <tr>
-            <td>{{ person.id }}</td>
-            <td>{{ person.name }}</td>
-            <td>{{ person.age }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
+    <h2>Каталог видео</h2>
+    <div class="catalog">
+        {% if videos.count > 0 %}
+            {% for v in videos %}
+                <div class="video">
+                    <img src="{{ v.snapshot_uri }}" height="100px">
+                    <h5>#{{ v.id }} - {{ v.name }}</h5>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h4>Пусто</h4>
+        {% endif %}
+    </div>
 </body>
 </html>

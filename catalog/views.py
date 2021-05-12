@@ -1,20 +1,18 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
-from .models import Person
+from .models import Video
 
 
 def index(request):
-    people = Person.objects.all()
-    print(people.count())
-    return render(request, 'catalog/index.html', {'people': people})
+    videos = Video.objects.all()
+    for v in videos:
+        v.snapshot_uri = v.get_snapshot_uri()
+    return render(request, 'catalog/index.html', {'videos': videos})
+
 
 def create(request):
-    print('this')
     if request.method == 'POST':
-        tom = Person()
-        tom.name = request.POST.get('name')
-        tom.age = request.POST.get('age')
-        tom.save()
-        print('thiiis')
-        print(tom)
+        v = Video()
+        v.name = request.POST.get('name')
+        v.save()
     return HttpResponseRedirect('/')
