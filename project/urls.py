@@ -16,8 +16,12 @@ Including another URLconf
 from catalog import views as catalog_views
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', catalog_views.index),
+    path('create/', catalog_views.create),
+    path('delete/', catalog_views.delete),
     path('admin/', admin.site.urls),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
