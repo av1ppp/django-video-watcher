@@ -41,9 +41,17 @@
             border-radius: 4px;
             margin: 7px 10px;
             width: 200px;
+            height: 120px;
             text-align: center;
         }
+        .video img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
         .video nav {
+            display: flex;
+            align-items: center;
             background: #d9d9d9;
         }
     </style>
@@ -71,15 +79,18 @@
         {% if videos.count > 0 %}
             {% for v in videos %}
                 <div class="video">
-                    <nav style="text-align: right;">
-                        <form action="delete/" method="POST">
-                            {% csrf_token %}
-                            {{ v.delete_form }}
-                            
-                            <input class="remove" type="submit" value="×">
-                        </form>
+                    <nav>
+                        <h5 style="padding: 0 5px; margin: 0">#{{ v.id }} - {{ v.name }}</h5>
+                        <div style="margin-left: auto">
+                            <form action="delete/" method="POST">
+                                {% csrf_token %}
+                                {{ v.delete_form }}
+                                
+                                <input class="remove" type="submit" value="×">
+                            </form>
+                        </div>
                     </nav>
-                    <h5>#{{ v.id }} - {{ v.name }}</h5>
+                    
                     <img src="{{ v.snapshot.image.url }}" height="100px">
                 </div>
             {% endfor %}
