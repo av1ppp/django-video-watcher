@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ video.name }}</title>
+    <title>{{ video.title }}</title>
     <style>
         nav { margin-bottom: 20px; }
         video {
@@ -24,6 +24,6 @@
         <a href="../"><button>Вернуться назад</button></a>
     </nav>
     <video src="{{ video.videofile.file.url }}" controls></video>
-    <h3>{{ video.name }}</h3>
+    <h3>{{ video.title }}</h3>
 </body>
 </html>

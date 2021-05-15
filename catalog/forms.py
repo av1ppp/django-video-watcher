@@ -1,7 +1,7 @@
 from django import forms
 
 class UploadVideoForm(forms.Form):
-    name = forms.CharField(label='Название', help_text='Введите название видео')
+    title = forms.CharField(label='Название', help_text='Введите название видео')
     # image = forms.ImageField(label='Изображение', help_text='Добавьте изображение для превью')
     video = forms.FileField(label='Видео', help_text='Добавьте видео')
 

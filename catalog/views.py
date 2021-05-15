@@ -1,10 +1,10 @@
 from .forms import UploadVideoForm, DeleteVideoForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Video, VideoFile
+from .models import VideoFile, VideoUnit
 
 def catalog(request):
-    videos = Video.objects.all()
+    videos = VideoUnit.objects.all()
     for v in videos:
         v.delete_form = DeleteVideoForm(initial={'video_id': v.id})
 
@@ -15,40 +15,39 @@ def catalog(request):
 
     return render(request, 'catalog/index.html', context)
 
+def make_error_string(form):
+    error_string = ''
+    for field in form:
+        if field.errors:
+            for error in field.errors:
+                error_string += error + '\n'
+
+
 def create_video(request):
     if request.method == 'POST':
         add_form = UploadVideoForm(request.POST, request.FILES)
         if add_form.is_valid():
-            name = add_form.cleaned_data.get('name')
+            title = add_form.cleaned_data.get('title')
             video = add_form.cleaned_data.get('video')
 
-            videofile = VideoFile.objects.create(file=video)
+            vu = VideoUnit.objects.create(title=title)
+            vu.save()
 
-            obj = Video.objects.create(name=name, videofile=videofile)
-            obj.save()
+            vf = VideoFile.objects.create(videounit=vu, file=video)
+            vf.save()
 
             return HttpResponseRedirect('../')
 
-        error_string = ''
-        for field in add_form:
-            if field.errors:
-                for error in field.errors:
-                    error_string += error + '\n'
-        return HttpResponse(error_string)
+        return HttpResponse(make_error_string(add_form))
 
 def delete_video(request):
     if request.method == 'POST':
         delete_form = DeleteVideoForm(request.POST)
         if delete_form.is_valid():
             video_id = delete_form.cleaned_data.get('video_id')
-            Video.objects.filter(id=video_id).delete()
+            VideoUnit.objects.filter(id=video_id).delete()
             return HttpResponseRedirect('../')
         
-        error_string = ''
-        for field in delete_form:
-            if field.errors:
-                for error in field.errors:
-                    error_string += error + '\n'
-        return HttpResponse(error_string)
+        return HttpResponse(make_error_string(delete_form))
 
     return HttpResponseRedirect('../')
