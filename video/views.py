@@ -15,6 +15,18 @@ def catalog(request):
 
     return render(request, 'catalog/index.html', context)
 
+def watch(request):
+    v = request.GET.get('v', '')
+    if not v:
+        return HttpResponseNotFound('Not Found')
+
+    video = VideoUnit.objects.get(id = int(v))
+    if not video:
+        return HttpResponseNotFound('Not Found')
+
+    context = {'video': video}
+    return render(request, 'watch/index.html', context)
+
 def make_error_string(form):
     error_string = ''
     for field in form:
