@@ -14,14 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from catalog import views as catalog_views
+from watch import views as watch_views
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('', catalog_views.index),
-    path('create/', catalog_views.create),
-    path('delete/', catalog_views.delete),
+    path('', catalog_views.catalog),
+    path('watch/', watch_views.watch),
+    path('create/', catalog_views.create_video),
+    path('delete/', catalog_views.delete_video),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

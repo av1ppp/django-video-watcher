@@ -79,7 +79,7 @@
     <div class="catalog">
         {% if videos.count > 0 %}
             {% for v in videos %}
-                <a target="_blank" href="/video/{{ v.id }}" style="color: unset; text-decoration: none">
+                <a href="/watch?v={{ v.id }}" style="color: unset; text-decoration: none">
                     <div class="video">
                         <nav>
                             <h5 style="padding: 0 5px; margin: 0">#{{ v.id }} - {{ v.name }}</h5>
@@ -93,7 +93,7 @@
                             </div>
                         </nav>
                         
-                        <img src="{{ v.snapshot.image.url }}" height="100px">
+                        <img src="{{ v.snapshot.file.url }}" height="100px">
                     </div>
                 </a>
             {% endfor %}

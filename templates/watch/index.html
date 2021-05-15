@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр видео</title>
+    <style>
+        nav { margin-bottom: 20px; }
+        video {
+            height: 300px;
+            width: 500px;
+            object-fit: cover;
+        }
+        h3 {
+            padding: 0; 
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="container">
+    <nav>
+        <a href="../"><button>Вернуться назад</button></a>
+    </nav>
+    <video src="{{ video.videofile.file.url }}" controls></video>
+    <h3>{{ video.name }}</h3>
+</body>
+</html>
