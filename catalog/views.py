@@ -1,8 +1,7 @@
 from .forms import UploadVideoForm, DeleteVideoForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import Snapshot, Video, VideoFile
-
+from .models import Video, VideoFile
 
 def catalog(request):
     videos = Video.objects.all()
@@ -21,14 +20,13 @@ def create_video(request):
         add_form = UploadVideoForm(request.POST, request.FILES)
         if add_form.is_valid():
             name = add_form.cleaned_data.get('name')
-            image = add_form.cleaned_data.get('image')
-            videofile = add_form.cleaned_data.get('videofile')
-            obj = Video.objects.create(
-                name = name,
-                snapshot = Snapshot.objects.create(file = image),
-                videofile = VideoFile.objects.create(file = videofile),
-            )
+            video = add_form.cleaned_data.get('video')
+
+            videofile = VideoFile.objects.create(file=video)
+
+            obj = Video.objects.create(name=name, videofile=videofile)
             obj.save()
+
             return HttpResponseRedirect('../')
 
         error_string = ''

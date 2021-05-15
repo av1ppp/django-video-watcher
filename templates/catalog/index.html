@@ -16,44 +16,32 @@
         }
         .alert { font-size: 12px; }
         .alert-danger { color: red; }
-        input[type="text"] { border-radius: 5px; }
-        input[type="button"], input[type="submit"], button {
+        .button {
+            border: none;
             background-color: rgb(47, 152, 201);
             color: white;
-            border: none;
             padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
         }
 
-        input[type="submit"].remove {
-            background: #f23f3f;
-            border-radius: 2px;
-            padding: 4px 8px;
-        }
+        .red { background: #f23f3f; }
 
-        .catalog {
-            display: flex;
-            flex-wrap: wrap;
+        .videos-table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .video {
-            border: 1px solid rgb(190, 190, 190);
-            overflow: hidden;
-            border-radius: 4px;
-            margin: 7px 10px;
-            width: 200px;
-            height: 135px;
+        .videos-table tbody td:first-child {
+            width: 40px;
             text-align: center;
         }
-        .video img {
-            height: 100%;
-            width: 100%;
-            object-fit: cover;
-        }
-        .video nav {
+        .controls {
             display: flex;
-            align-items: center;
-            background: #d9d9d9;
+            justify-content: space-evenly;
+        }
+        .control-button {
+            border-radius: 2px;
+            padding: 4px 8px;
         }
     </style>
 </head>
@@ -73,34 +61,41 @@
         </div>
     </form>
 
-    <hr>
-
-    <h2>Каталог видео</h2>
-    <div class="catalog">
-        {% if videos.count > 0 %}
+    <table class="videos-table" border>
+        <caption>Список видео</caption>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Название</th>
+                <th style="width: 20%">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
             {% for v in videos %}
-                <a href="/watch?v={{ v.id }}" style="color: unset; text-decoration: none">
-                    <div class="video">
-                        <nav>
-                            <h5 style="padding: 0 5px; margin: 0">#{{ v.id }} - {{ v.name }}</h5>
-                            <div style="margin-left: auto">
-                                <form action="delete/" method="POST">
-                                    {% csrf_token %}
-                                    {{ v.delete_form }}
-                                    
-                                    <input class="remove" type="submit" value="×">
-                                </form>
-                            </div>
-                        </nav>
-                        
-                        <img src="{{ v.snapshot.file.url }}" height="100px">
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.name }}</td>
+                <td>
+                    <div class="controls">
+                        <div>
+                            <a href="/watch?v={{ v.id }}">
+                                <button class="control-button button">Просмотр</button>
+                            </a>
+                        </div>
+                        <div>
+                            <form action="delete/" method="POST">
+                                {% csrf_token %}
+                                {{ v.delete_form }}
+                                <button class="control-button button red" type="submit">Удаление</button>
+                            </form>
+                        </div>
                     </div>
-                </a>
+                </td>
+            </tr>
             {% endfor %}
-        {% else %}
-            <h4>Пусто</h4>
-        {% endif %}
-    </div>
+        </tbody>
+    </table>
+
     <script src="{% static 'js/clear-forms.js' %}"></script>
 </body>
 </html>
