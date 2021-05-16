@@ -13,7 +13,7 @@ class VideoUnit(models.Model):
     def get_root_dir(self) -> str:
         return settings.MEDIA_ROOT + '/' + str(self.id)
 
-
+        
 def videofile_path(instance, filename):
     return f'{instance.videounit.get_root_dir()}/{filename}'
 
