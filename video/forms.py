@@ -6,4 +6,4 @@ class UploadVideoForm(forms.Form):
     video = forms.FileField(label='Видео', help_text='Добавьте видео')
 
 class DeleteVideoForm(forms.Form):
-    video_id = forms.IntegerField(widget=forms.HiddenInput())
+    video_id = forms.CharField(widget=forms.HiddenInput())

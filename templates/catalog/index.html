@@ -32,8 +32,12 @@
             border-collapse: collapse;
         }
         .videos-table tbody td:first-child {
-            width: 40px;
+            width: 120px;
             text-align: center;
+        }
+        .videos-table tbody td:nth-child(2) {
+            font-weight: bold;
+            padding-left: 20px;
         }
         .controls {
             display: flex;
@@ -43,6 +47,8 @@
             border-radius: 2px;
             padding: 4px 8px;
         }
+
+        .thumbnail { height: 90px; }
     </style>
 </head>
 <body class="container">
@@ -67,14 +73,18 @@
             <tr>
                 <th>#</th>
                 <th>Название</th>
+                <th>Изображение</th>
                 <th style="width: 20%">Действия</th>
             </tr>
         </thead>
         <tbody>
             {% for v in videos %}
             <tr>
-                <td>{{ v.id }}</td>
+                <td>{{ v.formatted_id }}</td>
                 <td>{{ v.title }}</td>
+                <td style="text-align: center;">
+                    <img class="thumbnail" src="{{ v.videothumbnail.file.url }}" alt="" srcset="">
+                </td>
                 <td>
                     <div class="controls">
                         <div>
