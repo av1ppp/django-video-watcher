@@ -80,7 +80,7 @@
         <tbody>
             {% for v in videos %}
             <tr>
-                <td>{{ v.formatted_id }}</td>
+                <td>{{ v.id }}</td>
                 <td>{{ v.title }}</td>
                 <td style="text-align: center;">
                     <img class="thumbnail" src="{{ v.videothumbnail.file.url }}" alt="" srcset="">
@@ -88,7 +88,7 @@
                 <td>
                     <div class="controls">
                         <div>
-                            <a href="/watch?v={{ v.id }}">
+                            <a href="/watch?id={{ v.id }}">
                                 <button class="control-button button">Просмотр</button>
                             </a>
                         </div>

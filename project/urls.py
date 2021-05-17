@@ -6,7 +6,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('', video_views.catalog),
-    path('watch/', video_views.watch),
+    path('watch/', video_views.watch_video),
     path('create/', video_views.create_video),
     path('delete/', video_views.delete_video),
     path('admin/', admin.site.urls),

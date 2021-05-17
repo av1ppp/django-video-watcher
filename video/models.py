@@ -1,17 +1,15 @@
 from django.db import models
 from django.dispatch.dispatcher import receiver
-from django.conf import settings
-import uuid
-import os
 import shutil
+from os import path
+from django.conf import settings
 
 class VideoUnit(models.Model):
     """ Видео как целый объект """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=255)
 
-    def get_root_dir(self) -> str:
-        return settings.MEDIA_ROOT + '/' + str(self.id)
+    def get_root_dir(self):
+        return str(self.id)
 
         
 def videofile_path(instance, filename):
@@ -19,7 +17,12 @@ def videofile_path(instance, filename):
 
 @receiver(models.signals.pre_delete, sender=VideoUnit)
 def auto_delete_videounit(sender, instance, **kwargs):
-    shutil.rmtree(instance.get_root_dir())
+    if instance.videofile and instance.videofile.file:
+        instance.videofile.file.delete()
+    if instance.videothumbnail and instance.videothumbnail.file:
+        instance.videothumbnail.file.delete()
+
+    shutil.rmtree(path.join(settings.MEDIA_ROOT, instance.get_root_dir()))
 
 class VideoFile(models.Model):
     """ Видео как файл """
@@ -27,7 +30,7 @@ class VideoFile(models.Model):
     videounit = models.OneToOneField(VideoUnit, on_delete=models.CASCADE,
         primary_key=True)
     
-    def __str__(self) -> str:
+    def __str__(self):
         return self.file.name
 
 def videothumbnail_path(instance, filename):
