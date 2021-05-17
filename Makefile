@@ -11,6 +11,12 @@ freeze:		## Save requirements.
 	pip3 freeze > requirements.txt
 
 install:    ## Install packages.
+	sudo apt install -y libmysqlclient-dev mysql-server mysql-client
+
+	sudo mysql --execute="CREATE USER 'ceaser'@'localhost' IDENTIFIED BY '0905';"
+	sudo mysql --execute="GRANT ALL PRIVILEGES ON *.* TO 'ceaser'@'localhost' WITH GRANT OPTION;"
+
+	python -m pip install --upgrade pip
 	pip3 install -r requirements.txt
 
 clean:      ## Clean byte-compiled files.
