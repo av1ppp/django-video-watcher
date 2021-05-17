@@ -7,6 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ video.title }}</title>
     <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container { padding: 10px 20px; }
+
         nav { margin-bottom: 20px; }
         video {
             height: 300px;
@@ -21,7 +29,7 @@
 </head>
 <body class="container">
     <nav>
-        <a href="../"><button>Вернуться назад</button></a>
+        <a href="../"><button><- Назад</button></a>
     </nav>
     <video src="{{ video.videofile.file.url }}" controls></video>
     <h3>{{ video.title }}</h3>

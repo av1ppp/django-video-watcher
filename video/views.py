@@ -10,9 +10,8 @@ def catalog(request):
     for v in videos:
         v.delete_form = DeleteVideoForm(initial={'video_id': v.id})
 
-    context = {'videos': videos, 'add_form': UploadVideoForm()}
-
-    return render(request, 'catalog/index.html', context)
+    context = {'videos': videos}
+    return render(request, 'video/catalog.html', context)
 
 def watch_video(request):
     video_id = request.GET.get('id', '')
@@ -24,13 +23,10 @@ def watch_video(request):
     if not video:
         return HttpResponseNotFound('Not Found')
     
-    print(video.videofile.file)
-    print(video.videothumbnail.file)
-
     context = {'video': video}
-    return render(request, 'watch/index.html', context)
+    return render(request, 'video/watch.html', context)
 
-def create_video(request):
+def upload_video(request):
     if request.method == 'POST':
         add_form = UploadVideoForm(request.POST, request.FILES)
         if add_form.is_valid():
@@ -39,8 +35,10 @@ def create_video(request):
                 add_form.cleaned_data.get('video'))
             
             return HttpResponseRedirect('../')
-    
         return HttpResponse(services.get_errors_with_form(add_form))
+    elif request.method == 'GET':
+        context = {'upload_form': UploadVideoForm()}
+        return render(request, 'video/upload.html', context)
 
 def delete_video(request):
     if request.method == 'POST':

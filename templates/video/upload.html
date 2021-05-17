@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление видео</title>
+
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container { padding: 10px 20px; }
+        hr {
+            border: none;
+            background: lightgrey;
+            color: lightgrey;
+            height: 1px;
+        }
+
+        input[type="text"] { width: 100%; }
+        input {
+            margin-top: 10px;
+            margin-bottom: 20px
+        }
+        .upload-form {
+            margin-top: 10px;
+            width: 600px;
+            border: 1px solid lightgray;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="container">
+    <nav>
+        <a href="../"><button><- Назад</button></a>
+    </nav>
+
+    <h1>Добавление видео</h1>
+    <span>Для добавления видео заполните форму ниже и нажмите на кнопку "Загрузить"</span>
+
+    <div class="upload-form">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                {% for field in upload_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    <div>{{ field }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            <hr>
+            <div style="text-align: right;">
+                <input type="submit" style="cursor: pointer;" value="Загрузить">
+            </div>
+        </form>
+    </div>
+    
+
+    <script src="{% static 'js/clear-forms.js' %}"></script>
+</body>
+</html>
