@@ -5,6 +5,7 @@ from django.conf import settings
 from os import path
 
 def create_videounit(title, video):
+    print(title)
     vu = VideoUnit.objects.create(title=title)
     vu.save()
 

@@ -1,13 +1,19 @@
-# Подробнее: https://blog.stroganov.pro/mysql-django-и-кириллические-проблемы
+#! /usr/bin/env python
+import MySQLdb
 
-from django.db import connection
+host = 'localhost'
+password = '0905'
+username = 'ceaser'
+dbname = 'csrweb'
 
-cursor = connection.cursor()
-cursor.execute('SHOW TABLES')
-results=[]
+db = MySQLdb.connect(host=host, user=username, passwd=password, db=dbname)
+cursor = db.cursor()
+
+cursor.execute(f"ALTER DATABASE `{dbname}` CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci'")
+
+cursor.execute(f"SELECT DISTINCT(table_name) FROM information_schema.columns WHERE table_schema = '{dbname}'")
 
 for row in cursor.fetchall():
-    results.append(row)
-
-for row in results:
-    cursor.execute(f'ALTER TABLE {row[0]} CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;')
+  cursor.execute(f"ALTER TABLE `{row[0]}` convert to character set DEFAULT COLLATE DEFAULT")
+  
+db.close()
