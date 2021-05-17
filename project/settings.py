@@ -88,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'csrweb',
-        'USER': 'django',
-        'PASSWORD': '2102',
+        'USER': 'ceaser',
+        'PASSWORD': '0905',
         'HOST': 'localhost',
         'PORT': '3306',
     }
