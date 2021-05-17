@@ -37,7 +37,7 @@ def create_video(request):
             services.create_videounit(
                 add_form.cleaned_data.get('title'),
                 add_form.cleaned_data.get('video'))
-
+            
             return HttpResponseRedirect('../')
     
         return HttpResponse(services.get_errors_with_form(add_form))
