@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.css" crossorigin="anonymous" />
     <title>Добавление видео</title>
 
     <style>
@@ -49,7 +50,7 @@
             <div>
                 {% for field in upload_form %}
                 <div class="form-group">
-                    {% if field.name == 'tags' %}
+                    {% if field.name == 'tags_js_string' %}
                         {{ field }}
                     {% else %}
                         {{ field.label_tag }}
@@ -57,8 +58,6 @@
                     {% endif %}
                 </div>
                 {% endfor %}
-                <ul>
-                </ul>
             </div>
             <hr>
             <div style="text-align: right;">
@@ -68,6 +67,14 @@
     </div>
     
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.js"></script>
     <script src="{% static 'js/clear-forms.js' %}"></script>
+    <script>
+        const inputElement = document.querySelector('#id_tags')
+        const tagify = new Tagify(inputElement)
+
+        tagify.addTags(inputElement.getAttribute('tags').split('; '))
+        console.log()
+    </script>
 </body>
 </html>

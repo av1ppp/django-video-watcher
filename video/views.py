@@ -26,6 +26,11 @@ def watch_video(request):
     return render(request, 'video/watch.html', context)
 
 def upload_video(request):
+    # VideoTag.objects.create(name='HD')
+    # VideoTag.objects.create(name='Lorem')
+    # VideoTag.objects.create(name='XxX')
+    # VideoTag.objects.create(name='Top10')
+    
     if request.method == 'POST':
         form = UploadVideoForm(request.POST, request.FILES)
         if form.is_valid():

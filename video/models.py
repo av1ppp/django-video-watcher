@@ -46,4 +46,7 @@ class VideoTag(models.Model):
     """ Теги для видео """
     name = models.CharField(max_length=255)
     videounits = models.ManyToManyField(VideoUnit)
+    
+    def __str__(self):
+        return self.name
 
