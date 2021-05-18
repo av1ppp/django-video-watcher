@@ -37,8 +37,13 @@ def videothumbnail_path(instance, filename):
     return f'{instance.videounit.get_root_dir()}/{filename}'
 
 class VideoThumbnail(models.Model):
-    """ Миниатюра для видео """
+    """ Миниатюрное изображение для видео """
     file = models.ImageField(upload_to=videothumbnail_path, null=True)
     videounit = models.OneToOneField(VideoUnit, on_delete=models.CASCADE,
         primary_key=True)
+
+class VideoTag(models.Model):
+    """ Теги для видео """
+    name = models.CharField(max_length=255)
+    videounits = models.ManyToManyField(VideoUnit)
 

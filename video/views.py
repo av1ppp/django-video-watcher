@@ -1,8 +1,7 @@
 from .forms import UploadVideoForm, DeleteVideoForm
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
-from django.conf import settings
-from .models import VideoUnit
+from .models import VideoUnit, VideoTag
 from . import services
 
 def catalog(request):
@@ -28,16 +27,19 @@ def watch_video(request):
 
 def upload_video(request):
     if request.method == 'POST':
-        add_form = UploadVideoForm(request.POST, request.FILES)
-        if add_form.is_valid():
+        form = UploadVideoForm(request.POST, request.FILES)
+        if form.is_valid():
             services.create_videounit(
-                add_form.cleaned_data.get('title'),
-                add_form.cleaned_data.get('video'))
+                form.cleaned_data.get('title'),
+                form.cleaned_data.get('video'))
             
             return HttpResponseRedirect('../')
-        return HttpResponse(services.get_errors_with_form(add_form))
+        return HttpResponse(services.get_errors_with_form(form))
+
     elif request.method == 'GET':
-        context = {'upload_form': UploadVideoForm()}
+        context = {
+            'upload_form': UploadVideoForm(),
+        }
         return render(request, 'video/upload.html', context)
 
 def delete_video(request):

@@ -49,10 +49,16 @@
             <div>
                 {% for field in upload_form %}
                 <div class="form-group">
-                    {{ field.label_tag }}
-                    <div>{{ field }}</div>
+                    {% if field.name == 'tags' %}
+                        {{ field }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        <div>{{ field }}</div>
+                    {% endif %}
                 </div>
                 {% endfor %}
+                <ul>
+                </ul>
             </div>
             <hr>
             <div style="text-align: right;">
