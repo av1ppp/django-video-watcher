@@ -50,12 +50,8 @@
             <div>
                 {% for field in upload_form %}
                 <div class="form-group">
-                    {% if field.name == 'tags_js_string' %}
-                        {{ field }}
-                    {% else %}
-                        {{ field.label_tag }}
-                        <div>{{ field }}</div>
-                    {% endif %}
+                    {{ field.label_tag }}
+                    <div>{{ field }}</div>
                 </div>
                 {% endfor %}
             </div>
@@ -71,10 +67,42 @@
     <script src="{% static 'js/clear-forms.js' %}"></script>
     <script>
         const inputElement = document.querySelector('#id_tags')
-        const tagify = new Tagify(inputElement)
+        let tagify
 
-        tagify.addTags(inputElement.getAttribute('tags').split('; '))
-        console.log()
+        function renameKey(obj, oldKey, newKey) {
+            const clonedObj = Object.assign({}, obj)
+            const targetKey = clonedObj[oldKey]
+
+            delete clonedObj[oldKey]
+            clonedObj[newKey] = targetKey
+            return clonedObj
+        }
+
+        // Update tags
+        (async() => {
+            const response = await fetch('/tags')
+            const json = await response.json()
+            const tags = json.tags
+
+            const whitelist = []
+
+            for (let tag of tags)
+                whitelist.push(renameKey(tag, 'name', 'value'))
+
+            tagify = new Tagify(inputElement, {
+                whitelist,
+                dropdown: {
+                    position: "manual",
+                    maxItems: Infinity,
+                    enabled: 0,
+                    classname: "customSuggestionsList"
+                },
+                enforceWhitelist: true,
+            })
+
+            tagify.dropdown.show.call(tagify)
+            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+        })()
     </script>
 </body>
 </html>

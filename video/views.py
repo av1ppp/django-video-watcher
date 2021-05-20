@@ -3,6 +3,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render
 from .models import VideoUnit, VideoTag
 from . import services
+import json
 
 def catalog(request):
     videos = VideoUnit.objects.all()
@@ -58,3 +59,18 @@ def delete_video(request):
         return HttpResponse(services.get_errors_with_form(delete_form))
 
     return HttpResponseRedirect('../')
+
+def get_tags(request):
+    tags = VideoTag.objects.all()
+
+    tags_dict = {'tags': [], 'count': 0}
+    for tag in tags:
+        tags_dict['tags'].append({
+            'name': tag.name,
+            'id': tag.id,
+        })
+        tags_dict['count'] += 1
+    tags_json = json.dumps(tags_dict, indent=4, ensure_ascii=False)
+        
+    return HttpResponse(tags_json, content_type='application/json; charset=utf-8')
+

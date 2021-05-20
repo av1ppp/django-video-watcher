@@ -9,5 +9,6 @@ urlpatterns = [
     path('watch/', video_views.watch_video),
     path('upload/', video_views.upload_video),
     path('delete/', video_views.delete_video),
+    path('tags/', video_views.get_tags),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
