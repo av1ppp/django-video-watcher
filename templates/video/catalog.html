@@ -1,105 +1,110 @@
-<!DOCTYPE html>
+{% extends "video/base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог</title>
 
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block title %}Videos{% endblock title %}
 
-        .container { padding: 10px 20px; }
+{% block header %}
+<style>
+    .controls {
+        display: grid;
+        margin-bottom: 40px;
+    }
 
-        .controls {
-            display: grid;
-            margin-bottom: 40px;
-        }
+    .button {
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .red { background: #f23f3f; }
+    .blue { background: #50b3d4; }
 
-        .button {
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        .red { background: #f23f3f; }
-        .blue { background: #50b3d4; }
+    .tags { display: flex; }
+    .tag {
+        font-size: 12px;
+        background: lightgrey;
+        padding: 3px 6px;
+        border-radius: 2px;
+        margin: 3px 6px;
+    }
 
-        .videos-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .videos-table tbody td:first-child {
-            width: 120px;
-            text-align: center;
-        }
-        .videos-table tbody td:nth-child(2) { padding-left: 20px; }
-        .controls {
-            display: flex;
-            justify-content: space-evenly;
-        }
-        .control-button {
-            border-radius: 2px;
-            padding: 4px 8px;
-        }
+    .videos-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .videos-table tbody td:first-child {
+        width: 120px;
+        text-align: center;
+    }
+    .videos-table tbody td:nth-child(2) { padding-left: 20px; }
+    .controls {
+        display: flex;
+        justify-content: space-evenly;
+    }
+    .control-button {
+        border-radius: 2px;
+        padding: 4px 8px;
+    }
 
-        .thumbnail {
-            height: 90px;
-            width: 90px;
-        }
-    </style>
-</head>
-<body class="container">
-    <div class="controls">
-        <a href="/upload"><button>+ Добавить видео</button></a>
-    </div>
+    .thumbnail {
+        height: 90px;
+        width: 90px;
+    }
+</style>
+{% endblock header %}
 
-    <table class="videos-table" border bordercolor="lightgrey">
-        <caption><h3>Список видео</h3></caption>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Название</th>
-                <th style="width: 120px">Изображение</th>
-                <th style="width: 20%">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for v in videos %}
-            <tr>
-                <td>{{ v.id }}</td>
-                <td>{{ v.title }}</td>
-                <td style="text-align: center;">
-                    <img class="thumbnail" src="{{ v.videothumbnail.file.url }}">
-                </td>
-                <td>
-                    <div class="controls">
-                        <div>
-                            <a href="/watch?id={{ v.id }}">
-                                <button class="control-button button blue">Просмотр</button>
-                            </a>
-                        </div>
-                        <div>
-                            <form action="delete/" method="POST">
-                                {% csrf_token %}
-                                {{ v.delete_form }}
-                                <button class="control-button button red" type="submit">Удаление</button>
-                            </form>
-                        </div>
+{% block content %}
+<div class="controls">
+    <a href="/upload"><button>+ Add video</button></a>
+</div>
+
+<table class="videos-table" border bordercolor="lightgrey">
+    <caption><h3>Video list</h3></caption>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Tags</th>
+            <th style="width: 120px">Image</th>
+            <th style="width: 20%">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in videos %}
+        <tr>
+            <td>{{ v.id }}</td>
+            <td>{{ v.title }}</td>
+            <td>
+                <div class="tags">
+                    {% for t in v.tags %}
+                    <span class="tag">{{ t.name }}</span>
+                    {% endfor %}
+                </div>
+            </td>
+            <td style="text-align: center;">
+                <img class="thumbnail" src="{{ v.videothumbnail.file.url }}">
+            </td>
+            <td>
+                <div class="controls">
+                    <div>
+                        <a href="/watch?id={{ v.id }}">
+                            <button class="control-button button blue">Watching</button>
+                        </a>
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    <div>
+                        <form action="delete/" method="POST">
+                            {% csrf_token %}
+                            {{ v.delete_form }}
+                            <button class="control-button button red" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-    <script src="{% static 'js/clear-forms.js' %}"></script>
-</body>
-</html>
+<script src="{% static 'js/clear-forms.js' %}"></script>
+{% endblock content %}

@@ -1,108 +1,99 @@
-<!DOCTYPE html>
+{% extends "video/base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.css" crossorigin="anonymous" />
-    <title>Добавление видео</title>
 
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container { padding: 10px 20px; }
-        hr {
-            border: none;
-            background: lightgrey;
-            color: lightgrey;
-            height: 1px;
-        }
+{% block title %}Add video{% endblock title %}
 
-        input[type="text"] { width: 100%; }
-        input {
-            margin-top: 10px;
-            margin-bottom: 20px
-        }
-        .upload-form {
-            margin-top: 10px;
-            width: 600px;
-            border: 1px solid lightgray;
-            padding: 20px;
-        }
-    </style>
-</head>
-<body class="container">
-    <nav>
-        <a href="../"><button><- Назад</button></a>
-    </nav>
+{% block header %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.css" crossorigin="anonymous" />
+<style>
+    hr {
+        border: none;
+        background: lightgrey;
+        color: lightgrey;
+        height: 1px;
+    }
 
-    <h1>Добавление видео</h1>
-    <span>Для добавления видео заполните форму ниже и нажмите на кнопку "Загрузить"</span>
+    input[type="text"] { width: 100%; }
+    input {
+        margin-top: 10px;
+        margin-bottom: 20px
+    }
+    .upload-form {
+        margin-top: 10px;
+        width: 600px;
+        border: 1px solid lightgray;
+        padding: 20px;
+    }
+</style>
+{% endblock header %}
 
-    <div class="upload-form">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div>
-                {% for field in upload_form %}
-                <div class="form-group">
-                    {{ field.label_tag }}
-                    <div>{{ field }}</div>
-                </div>
-                {% endfor %}
+{% block content %}
+<nav>
+    <a href="../"><button><- Назад</button></a>
+</nav>
+
+<h1>Добавление видео</h1>
+<span>Для добавления видео заполните форму ниже и нажмите на кнопку "Загрузить"</span>
+
+<div class="upload-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            {% for field in upload_form %}
+            <div class="form-group">
+                {{ field.label_tag }}
+                <div>{{ field }}</div>
             </div>
-            <hr>
-            <div style="text-align: right;">
-                <input type="submit" style="cursor: pointer;" value="Загрузить">
-            </div>
-        </form>
-    </div>
-    
+            {% endfor %}
+        </div>
+        <hr>
+        <div style="text-align: right;">
+            <input type="submit" style="cursor: pointer;" value="Загрузить">
+        </div>
+    </form>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.js"></script>
-    <script src="{% static 'js/clear-forms.js' %}"></script>
-    <script>
-        const inputElement = document.querySelector('#id_tags')
-        let tagify
 
-        function renameKey(obj, oldKey, newKey) {
-            const clonedObj = Object.assign({}, obj)
-            const targetKey = clonedObj[oldKey]
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.1.1/tagify.min.js"></script>
+<script src="{% static 'js/clear-forms.js' %}"></script>
+<script>
+    const inputElement = document.querySelector('#id_tags')
+    let tagify
 
-            delete clonedObj[oldKey]
-            clonedObj[newKey] = targetKey
-            return clonedObj
-        }
+    function renameKey(obj, oldKey, newKey) {
+        const clonedObj = Object.assign({}, obj)
+        const targetKey = clonedObj[oldKey]
 
-        // Update tags
-        (async() => {
-            const response = await fetch('/tags')
-            const json = await response.json()
-            const tags = json.tags
+        delete clonedObj[oldKey]
+        clonedObj[newKey] = targetKey
+        return clonedObj
+    }
 
-            const whitelist = []
+    // Update tags
+    (async() => {
+        const response = await fetch('/tags')
+        const json = await response.json()
+        const tags = json.tags
 
-            for (let tag of tags)
-                whitelist.push(renameKey(tag, 'name', 'value'))
+        const whitelist = []
 
-            tagify = new Tagify(inputElement, {
-                whitelist,
-                dropdown: {
-                    position: "manual",
-                    maxItems: Infinity,
-                    enabled: 0,
-                    classname: "customSuggestionsList"
-                },
-                enforceWhitelist: true,
-            })
+        for (let tag of tags)
+            whitelist.push(renameKey(tag, 'name', 'value'))
 
-            tagify.dropdown.show.call(tagify)
-            tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
-        })()
-    </script>
-</body>
-</html>
+        tagify = new Tagify(inputElement, {
+            whitelist,
+            maxTags: 32,
+            dropdown: {
+                position: "manual",
+                maxItems: 5,
+                enabled: 0,
+                classname: "customSuggestionsList",
+            },
+            // enforceWhitelist: true,
+        })
+
+        tagify.dropdown.show.call(tagify)
+        tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+    })()
+</script>
+{% endblock content %}

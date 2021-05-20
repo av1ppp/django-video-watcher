@@ -5,10 +5,14 @@ from .models import VideoUnit, VideoTag
 from . import services
 import json
 
+def home(request):
+    return render(request, 'video/home.html')
+
 def catalog(request):
     videos = VideoUnit.objects.all()
     for v in videos:
         v.delete_form = DeleteVideoForm(initial={'video_id': v.id})
+        v.tags = list(v.videotag_set.all().values('name'))
 
     context = {'videos': videos}
     return render(request, 'video/catalog.html', context)
@@ -27,19 +31,16 @@ def watch_video(request):
     return render(request, 'video/watch.html', context)
 
 def upload_video(request):
-    # VideoTag.objects.create(name='HD')
-    # VideoTag.objects.create(name='Lorem')
-    # VideoTag.objects.create(name='XxX')
-    # VideoTag.objects.create(name='Top10')
-    
     if request.method == 'POST':
         form = UploadVideoForm(request.POST, request.FILES)
         if form.is_valid():
             services.create_videounit(
-                form.cleaned_data.get('title'),
-                form.cleaned_data.get('video'))
+                title=form.cleaned_data.get('title'),
+                video=form.cleaned_data.get('video'),
+                tags=json.loads(form.cleaned_data.get('tags')),
+            )
             
-            return HttpResponseRedirect('../')
+            return HttpResponseRedirect('/catalog')
         return HttpResponse(services.get_errors_with_form(form))
 
     elif request.method == 'GET':
@@ -54,11 +55,11 @@ def delete_video(request):
         if delete_form.is_valid():
             video_id = delete_form.cleaned_data.get('video_id')
             VideoUnit.objects.filter(id=video_id).delete()
-            return HttpResponseRedirect('../')
+            return HttpResponseRedirect('/catalog')
         
         return HttpResponse(services.get_errors_with_form(delete_form))
 
-    return HttpResponseRedirect('../')
+    return HttpResponseRedirect('/catalog')
 
 def get_tags(request):
     tags = VideoTag.objects.all()

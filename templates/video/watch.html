@@ -1,37 +1,27 @@
-<!DOCTYPE html>
+{% extends "video/base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ video.title }}</title>
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .container { padding: 10px 20px; }
 
-        nav { margin-bottom: 20px; }
-        video {
-            height: 300px;
-            width: 500px;
-            object-fit: cover;
-        }
-        h3 {
-            padding: 0; 
-            margin: 0;
-        }
-    </style>
-</head>
-<body class="container">
-    <nav>
-        <a href="../"><button><- Назад</button></a>
-    </nav>
-    <video src="{{ video.videofile.file.url }}" controls></video>
-    <h3>{{ video.title }}</h3>
-</body>
-</html>
+{% block title %}{{ video.title }}{% endblock title %}
+
+{% block header %}
+<style>
+    nav { margin-bottom: 20px; }
+    video {
+        height: 300px;
+        width: 500px;
+        object-fit: cover;
+    }
+    h3 {
+        padding: 0; 
+        margin: 0;
+    }
+</style>
+{% endblock header %}
+
+{% block content %}
+<nav>
+    <a href="/catalog"><button><- Go to catalog</button></a>
+</nav>
+<video src="{{ video.videofile.file.url }}" controls></video>
+<h3>{{ video.title }}</h3>
+{% endblock content %}
