@@ -1,5 +1,5 @@
 from django.forms import widgets
-from video.models import VideoFile, VideoTag, VideoUnit
+# from .models import video
 from django import forms
 
 class UploadVideoForm(forms.Form):

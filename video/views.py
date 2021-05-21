@@ -1,7 +1,7 @@
 from .forms import UploadVideoForm, DeleteVideoForm
 from django.http.response import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
-from .models import VideoUnit, VideoTag
+from .models import video
 from . import services
 import json
 
@@ -9,7 +9,7 @@ def home(request):
     return render(request, 'video/home.html')
 
 def catalog(request):
-    videos = VideoUnit.objects.all()
+    videos = video.VideoUnit.objects.all()
     for v in videos:
         v.delete_form = DeleteVideoForm(initial={'video_id': v.id})
         v.tags = list(v.videotag_set.all().values('name'))
@@ -23,11 +23,11 @@ def watch_video(request):
         return HttpResponseNotFound('Not Found')
     video_id = int(video_id)
 
-    video = VideoUnit.objects.get(id=video_id)
-    if not video:
+    v = video.VideoUnit.objects.get(id=video_id)
+    if not v:
         return HttpResponseNotFound('Not Found')
     
-    context = {'video': video}
+    context = {'video': v}
     return render(request, 'video/watch.html', context)
 
 def upload_video(request):
@@ -54,7 +54,7 @@ def delete_video(request):
         delete_form = DeleteVideoForm(request.POST)
         if delete_form.is_valid():
             video_id = delete_form.cleaned_data.get('video_id')
-            VideoUnit.objects.filter(id=video_id).delete()
+            video.VideoUnit.objects.filter(id=video_id).delete()
             return HttpResponseRedirect('/catalog')
         
         return HttpResponse(services.get_errors_with_form(delete_form))
@@ -62,7 +62,7 @@ def delete_video(request):
     return HttpResponseRedirect('/catalog')
 
 def get_tags(request):
-    tags = VideoTag.objects.all()
+    tags = video.VideoTag.objects.all()
 
     tags_dict = {'tags': [], 'count': 0}
     for tag in tags:
